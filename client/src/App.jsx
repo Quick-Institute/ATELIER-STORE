@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
 import WishlistModal from './components/WishlistModal';
 import { getProductOffer } from './utils/offerUtils';
+import { resolveProductImage, resolveUserAvatar, handleImageError, handleAvatarError } from './utils/imageUtils';
 
 // Modular Page Views from src/pages/
 import HomePage from './pages/HomePage';
@@ -96,7 +97,7 @@ export default function App() {
       title: item.title || item.name,
       price: effectivePrice,
       qty: item.quantity || item.qty || 1,
-      img: item.img,
+      img: resolveProductImage(item),
       size: item.size,
       color: item.color,
     });
@@ -262,7 +263,7 @@ export default function App() {
     }
   });
 
-  // Dynamic price resolution effect: Overwrites legacy hardcoded prices with live DB/Offer prices
+  // Dynamic price & image resolution effect: Overwrites legacy hardcoded prices & repairs missing images
   useEffect(() => {
     if (!dbProducts || dbProducts.length === 0) return;
 
@@ -270,11 +271,20 @@ export default function App() {
       let changed = false;
       const updated = prevCart.map((item) => {
         const livePrice = resolveItemPrice(item, dbProducts);
+        const targetId = getProductUniqueId(item);
+        const matchedProduct = dbProducts.find((p) => getProductUniqueId(p) === targetId);
+        const liveImg = matchedProduct ? resolveProductImage(matchedProduct) : resolveProductImage(item);
+
+        let newItem = { ...item };
         if (item.price !== livePrice) {
           changed = true;
-          return { ...item, price: livePrice };
+          newItem.price = livePrice;
         }
-        return item;
+        if (!newItem.img || (!newItem.img.startsWith('http') && !newItem.img.startsWith('data:')) || newItem.img.includes('undefined')) {
+          changed = true;
+          newItem.img = liveImg;
+        }
+        return newItem;
       });
       return changed ? updated : prevCart;
     });
@@ -283,11 +293,20 @@ export default function App() {
       let changed = false;
       const updated = prevWish.map((item) => {
         const livePrice = resolveItemPrice(item, dbProducts);
+        const targetId = getProductUniqueId(item);
+        const matchedProduct = dbProducts.find((p) => getProductUniqueId(p) === targetId);
+        const liveImg = matchedProduct ? resolveProductImage(matchedProduct) : resolveProductImage(item);
+
+        let newItem = { ...item };
         if (item.price !== livePrice) {
           changed = true;
-          return { ...item, price: livePrice };
+          newItem.price = livePrice;
         }
-        return item;
+        if (!newItem.img || (!newItem.img.startsWith('http') && !newItem.img.startsWith('data:')) || newItem.img.includes('undefined')) {
+          changed = true;
+          newItem.img = liveImg;
+        }
+        return newItem;
       });
       return changed ? updated : prevWish;
     });
@@ -366,10 +385,7 @@ export default function App() {
     const targetId = getProductUniqueId(product);
     const titleStr = product.title || product.name || 'Atelier Garment';
     const effectivePrice = resolveItemPrice(product, dbProducts);
-    let displayImg = product.img;
-    if (!displayImg && product.images && product.images.length > 0) {
-      displayImg = product.images[0];
-    }
+    const displayImg = resolveProductImage(product);
 
     setCartItems((prev) => {
       const existing = prev.find((item) => getProductUniqueId(item) === targetId);
@@ -434,10 +450,7 @@ export default function App() {
 
     const titleStr = product.title || product.name || 'Atelier Garment';
     const effectivePrice = resolveItemPrice(product, dbProducts);
-    let displayImg = product.img;
-    if (!displayImg && product.images && product.images.length > 0) {
-      displayImg = product.images[0];
-    }
+    const displayImg = resolveProductImage(product);
 
     setWishlistItems((prev) => {
       const exists = prev.some((item) => getProductUniqueId(item) === targetId);
@@ -504,7 +517,11 @@ export default function App() {
       {/* Main Page Content Switcher */}
       <main
         className={`w-full bg-surface ${
-          activeTab !== 'checkout' && activeTab !== 'admin' ? 'pt-[116px]' : ''
+          activeTab !== 'checkout' && activeTab !== 'admin'
+            ? activeTab === 'home'
+              ? 'pt-0'
+              : 'pt-[116px]'
+            : ''
         }`}
       >
         {activeTab === 'admin' ? (
@@ -673,8 +690,9 @@ export default function App() {
                         className="flex items-center gap-space-md p-space-xs rounded bg-surface-container-low border border-surface-variant"
                       >
                         <img
-                          src={item.img}
+                          src={resolveProductImage(item)}
                           alt={item.title}
+                          onError={handleImageError()}
                           className="w-16 h-20 object-cover rounded shrink-0 bg-surface-container"
                         />
                         <div className="flex-1">

@@ -517,274 +517,56 @@ export default function HomePage({ onAddToCart, onSelectProduct, onToggleWishlis
     <div className="w-full bg-surface font-body-md text-body-md text-on-surface antialiased">
 
 
-      {/* 1. HERO SECTION */}
-      <section className="relative w-full overflow-hidden bg-surface pt-space-xl pb-space-2xl">
-        {/* Next-Level Ambient Glow Mesh Backdrop */}
-        <div className="hero-ambient-glow-orb"></div>
-        <div className="hero-ambient-glow-orb-secondary"></div>
+      {/* 1. HERO SECTION (Editorial Style - Exact Match to User Mockup with Circular Arch & Model in Navbar) */}
+      <section className="relative w-full min-h-[640px] sm:min-h-[720px] md:min-h-[800px] lg:min-h-[860px] xl:min-h-[900px] overflow-hidden flex items-center bg-[#FAF8F5]">
+        {/* Large 3D Beveled Circular Arch Frame (exact match to user reference image) */}
+        <div className="absolute -left-24 sm:-left-16 md:-left-8 lg:left-2 xl:left-6 top-1/2 -translate-y-1/2 w-[540px] h-[540px] sm:w-[660px] sm:h-[660px] md:w-[760px] md:h-[760px] lg:w-[880px] lg:h-[880px] xl:w-[960px] xl:h-[960px] rounded-full border-[10px] sm:border-[14px] md:border-[18px] border-white/85 shadow-[inset_0_4px_24px_rgba(0,0,0,0.05),0_15px_50px_rgba(0,0,0,0.06)] bg-gradient-to-br from-[#FCFBF8] via-[#FAF8F5] to-[#F5F1E8] pointer-events-none z-10" />
 
-        {/* Floating Luxury Light Particles */}
-        <div className="absolute top-12 left-1/4 w-2 h-2 rounded-full bg-[#b45a34]/30 blur-[1px] animate-particle-1 pointer-events-none"></div>
-        <div className="absolute top-24 right-1/3 w-3 h-3 rounded-full bg-[#d97706]/25 blur-[1px] animate-particle-2 pointer-events-none"></div>
-        <div className="absolute top-8 right-1/4 w-1.5 h-1.5 rounded-full bg-[#8a432b]/40 blur-[1px] animate-particle-3 pointer-events-none"></div>
+        {/* The Model Cutout - Extends straight UP into the navbar row between nav links and icons */}
+        <div className="absolute right-2 sm:right-6 md:right-12 lg:right-16 xl:right-28 2xl:right-40 top-0 bottom-0 z-20 flex items-start justify-end pointer-events-none select-none">
+          <img
+            src="/images/editorial-model-transparent.png"
+            alt="Atelier Store Editorial Model"
+            className="h-[105%] sm:h-[110%] md:h-[115%] lg:h-[120%] max-h-[1020px] w-auto object-contain object-top drop-shadow-2xl"
+          />
+        </div>
 
-        <div className="max-w-[1380px] mx-auto px-margin relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Hero Narrative Left */}
-            <div className="lg:col-span-7 flex flex-col justify-center space-y-6 pr-0 lg:pr-space-lg">
-              {/* Eyebrow subheader */}
-              <div className="inline-flex items-center gap-2 px-1 py-0.5 self-start reveal-on-scroll">
-                <span className="font-label-uppercase text-xs text-[#b45a34] shimmer-copper-text tracking-[0.25em] font-bold">
-                  <TypewriterText text="THE SPRING / SUMMER EDIT — 2026" speed={25} delay={100} cursor={true} />
-                </span>
-              </div>
+        {/* Hero Narrative Left Content (framed inside the circular arch) */}
+        <div className="max-w-[1500px] w-full mx-auto px-6 sm:px-10 md:px-14 lg:px-20 relative z-30 pt-28 sm:pt-32 md:pt-36 pb-14 md:pb-20">
+          <div className="max-w-xl lg:max-w-2xl">
+            {/* Main Headline */}
+            <h1 className="font-serif text-[44px] sm:text-[56px] md:text-[66px] lg:text-[76px] leading-[1.04] tracking-tight font-normal text-neutral-900">
+              <span className="block">Timeless Style.</span>
+              <span className="block">Modern Elegance.</span>
+            </h1>
 
-              {/* Main Headline */}
-              <h1 className="font-serif text-[48px] sm:text-[64px] lg:text-[76px] leading-[1.05] tracking-tight font-normal reveal-font-on-scroll hero-title-anim min-h-[130px] sm:min-h-[150px]">
-                <span className="block text-[#1c1917]">
-                  <TypewriterText text="Clothes for" speed={35} delay={400} cursor={false} />
-                </span>
-                <span className="block italic shimmer-copper-text">
-                  <TypewriterText text="real life." speed={35} delay={950} cursor={true} />
-                </span>
-              </h1>
+            {/* Subtitle */}
+            <p className="font-sans text-neutral-600 text-sm sm:text-base md:text-lg max-w-md leading-relaxed mt-4 sm:mt-5 font-normal">
+              Elevated everyday pieces, designed to make you feel confident.
+            </p>
 
-              {/* Paragraph */}
-              <p className="font-body-lg text-body-lg text-[#57534e] max-w-xl leading-relaxed reveal-on-scroll min-h-[70px]">
-                <TypewriterText text="Thoughtful layers, tactile fabrics, and a softer approach to getting dressed. Made slowly in small batches for wherever the day takes you." speed={18} delay={1500} cursor={false} />
-              </p>
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center gap-5 sm:gap-7 pt-6 sm:pt-9">
+              <button
+                onClick={() => {
+                  const el = document.getElementById('editions-grid');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  else if (onExploreShop) onExploreShop('');
+                }}
+                className="bg-[#191817] hover:bg-black text-white text-[11px] sm:text-xs font-semibold tracking-[0.16em] uppercase px-7 py-3.5 transition-all shadow-sm hover:shadow-md cursor-pointer"
+              >
+                SHOP NEW ARRIVALS
+              </button>
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-6 pt-2 reveal-on-scroll">
-                <a
-                  onMouseMove={handleMagneticMove}
-                  onMouseLeave={handleMagneticReset}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#1c1917] text-white font-label-uppercase text-xs tracking-[0.15em] font-bold rounded-full transition-all hover:bg-[#333] shadow-md cursor-pointer will-change-transform"
-                  href="#editions-grid"
-                >
-                  <span><TypewriterText text="SHOP THE COLLECTION" speed={20} delay={2500} cursor={false} /></span>
-                  <span className="material-symbols-outlined text-[16px]">north_east</span>
-                </a>
-                <a
-                  onMouseMove={handleMagneticMove}
-                  onMouseLeave={handleMagneticReset}
-                  className="inline-flex items-center gap-2 px-3 py-3.5 text-[#44403c] hover:text-[#1c1917] font-label-uppercase text-xs tracking-[0.15em] font-bold transition-all cursor-pointer will-change-transform"
-                  href="#atelier-philosophy"
-                >
-                  <span><TypewriterText text="OUR MATERIALS" speed={20} delay={2800} cursor={false} /></span>
-                  <span className="material-symbols-outlined text-[18px]">chevron_right</span>
-                </a>
-              </div>
-
-              {/* Bottom 3 Feature Columns */}
-              <div className="pt-6 mt-4 border-t border-[#e7e5e4] grid grid-cols-3 gap-4 text-on-surface-variant reveal-on-scroll">
-                <div>
-                  <div className="text-[11px] font-mono text-[#a8a29e] mb-1 font-semibold">01</div>
-                  <div className="text-xs font-label-uppercase tracking-[0.15em] text-[#1c1917] font-bold">
-                    <TypewriterText text="NATURAL FIBERS" speed={20} delay={3100} cursor={false} />
-                  </div>
-                </div>
-                <div>
-                  <div className="text-[11px] font-mono text-[#a8a29e] mb-1 font-semibold">02</div>
-                  <div className="text-xs font-label-uppercase tracking-[0.15em] text-[#1c1917] font-bold">
-                    <TypewriterText text="SMALL BATCH" speed={20} delay={3300} cursor={false} />
-                  </div>
-                </div>
-                <div>
-                  <div className="text-[11px] font-mono text-[#a8a29e] mb-1 font-semibold">03</div>
-                  <div className="text-xs font-label-uppercase tracking-[0.15em] text-[#1c1917] font-bold">
-                    <TypewriterText text="THOUGHTFUL FIT" speed={20} delay={3500} cursor={false} />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Hero Featured Card Right */}
-            {(() => {
-              if (loadingDb && (!products || products.length === 0)) {
-                return (
-                  <div className="lg:col-span-5 relative mt-space-lg lg:mt-0 reveal-scale-on-scroll">
-                    <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-md border border-surface-variant animate-pulse">
-                      <div className="aspect-[3/4] w-full bg-surface-container-high rounded-lg flex items-center justify-center relative overflow-hidden">
-                        <span className="material-symbols-outlined text-4xl text-on-surface-variant/40 animate-spin">
-                          cyclone
-                        </span>
-                        <span className="absolute bottom-4 font-label-uppercase text-[10px] text-on-surface-variant tracking-widest uppercase font-semibold">
-                          Fetching Archival Garment...
-                        </span>
-                      </div>
-                      <div className="mt-space-sm pt-space-xs flex items-center justify-between">
-                        <div className="h-4 bg-surface-container-high rounded w-1/2"></div>
-                        <div className="h-4 bg-surface-container-high rounded w-1/4"></div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-
-              const heroGarment = (products && products.length > 0) ? products[0] : null;
-              if (!heroGarment) return null;
-
-              const heroIdStr = String(heroGarment.id || heroGarment._id || '');
-              const isHeroFav = wishlistIds.some((id) => String(id) === heroIdStr || String(id) === String(heroGarment._id));
-              const numPrice = typeof heroGarment.price === 'number' ? heroGarment.price : (heroGarment.numericPrice || 48000);
-              const heroOffer = getProductOffer(heroGarment);
-
-              return (
-                <div className="lg:col-span-5 relative mt-space-lg lg:mt-0 reveal-scale-on-scroll">
-                  <div
-                    onMouseMove={handleCard3DTilt}
-                    onMouseLeave={handleCard3DReset}
-                    className="bg-surface-container-lowest rounded-xl p-space-md shadow-md transition-all hover:shadow-2xl relative group card-shimmer card-3d-tilt-container"
-                  >
-                    {/* Badge overlay */}
-                    {heroOffer.hasActiveOffer ? (
-                      <div className="absolute top-6 left-6 z-10 flex flex-col gap-1 items-start">
-                        <span className="px-3 py-1 bg-rose-600 text-white font-label-uppercase font-bold text-xs tracking-wider rounded shadow-md flex items-center gap-1 animate-pulse">
-                          <span className="material-symbols-outlined text-xs">local_offer</span>
-                          {heroOffer.offerPercentage}% OFF
-                        </span>
-                        <span className="px-2 py-0.5 bg-black/80 text-amber-300 text-[10px] font-mono rounded shadow-xs">
-                          ⏳ {heroOffer.timeRemainingStr}
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="absolute top-6 left-6 z-10 flex flex-col gap-1">
-                        <span className="px-space-sm py-0.5 bg-surface/90 backdrop-blur text-on-surface font-label-uppercase text-[10px] tracking-widest rounded shadow-sm">
-                          {heroGarment.badge || 'HAND-NUMBERED CUT 18/60'}
-                        </span>
-                        <span className="px-space-sm py-0.5 bg-secondary text-on-secondary font-label-uppercase text-[9px] tracking-wider rounded self-start">
-                          EDITION PREVIEW
-                        </span>
-                      </div>
-                    )}
-                    {/* Wishlist quick toggle */}
-                    <button
-                      aria-label="Save to wishlist"
-                      onClick={() => onToggleWishlist && onToggleWishlist(heroGarment)}
-                      className={`absolute top-6 right-6 z-10 w-9 h-9 rounded-full bg-surface/85 backdrop-blur flex items-center justify-center transition-all shadow-sm wishlist-btn cursor-pointer ${isHeroFav ? 'text-red-600 bg-surface scale-110 shadow-md' : 'text-on-surface hover:text-red-600'
-                        }`}
-                    >
-                      <span className="material-symbols-outlined text-[18px]">
-                        {isHeroFav ? 'favorite' : 'favorite_border'}
-                      </span>
-                    </button>
-                    {/* Image with Aspect Ratio */}
-                    <div
-                      className="aspect-[3/4] w-full overflow-hidden rounded-lg bg-surface-container relative cursor-pointer"
-                      onClick={() => onSelectProduct && onSelectProduct(heroGarment.id)}
-                    >
-                      <img
-                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                        alt={heroGarment.title}
-                        src={heroGarment.img}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1000&q=80';
-                        }}
-                      />
-                      <div className="absolute bottom-3 left-3 right-3 bg-surface/90 backdrop-blur-md px-space-md py-space-sm rounded flex items-center justify-between">
-                        <div>
-                          <p className="font-label-uppercase text-[10px] text-secondary tracking-widest uppercase">
-                            {heroGarment.studio || heroGarment.color || 'Kyoto Atelier • Loomed 2026'}
-                          </p>
-                          <p className="font-headline-sm text-[16px] text-on-surface font-medium leading-tight">
-                            {heroGarment.title}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          {heroOffer.hasActiveOffer ? (
-                            <div className="flex flex-col items-end">
-                              <span className="font-title-md text-title-md text-rose-700 font-bold">
-                                {formatRsPrice(heroOffer.discountedPrice)}
-                              </span>
-                              <span className="line-through text-[11px] text-outline font-mono">
-                                {formatRsPrice(heroOffer.rawPrice)}
-                              </span>
-                            </div>
-                          ) : (
-                            <>
-                              <span className="font-title-md text-title-md text-on-surface font-bold">
-                                Rs. {Math.round(numPrice).toLocaleString('en-LK')}
-                              </span>
-                              <span className="block font-body-sm text-[10px] text-on-surface-variant">
-                                Tax &amp; Duty Incl.
-                              </span>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    {/* Detail Strip Below Image */}
-                    <div className="mt-space-sm pt-space-xs flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
-                      <span>{heroGarment.category || 'Pure Normandy Heavy Flax • 410 GSM'}</span>
-                      <button
-                        type="button"
-                        onClick={() => onSelectProduct && onSelectProduct(heroGarment.id)}
-                        className="font-label-uppercase text-label-uppercase text-secondary flex items-center gap-1 hover:underline cursor-pointer bg-transparent border-none p-0"
-                      >
-                        View Specs <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })()}
-          </div>
-
-          {/* Hero Trust Pillars Strip */}
-          <div className="mt-space-2xl grid grid-cols-2 lg:grid-cols-4 gap-space-md pt-space-lg bg-surface-container-low rounded-xl p-space-lg">
-            <div className="flex items-start gap-space-sm reveal-on-scroll stagger-1">
-              <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0 pillar-icon-float">
-                <span className="material-symbols-outlined text-secondary text-[20px]">filter_vintage</span>
-              </div>
-              <div>
-                <h4 className="font-title-md text-[14px] text-on-surface font-medium uppercase tracking-wider">
-                  Fiber Discipline
-                </h4>
-                <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
-                  100% unbleached flax, wild tussar silk, and Tibetan yak wool.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-space-sm reveal-on-scroll stagger-2">
-              <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0 pillar-icon-float">
-                <span className="material-symbols-outlined text-secondary text-[20px]">opacity</span>
-              </div>
-              <div>
-                <h4 className="font-title-md text-[14px] text-on-surface font-medium uppercase tracking-wider">
-                  Plant Pigments
-                </h4>
-                <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
-                  Living indigo vats, fermented persimmon kakishibu, and walnut husk.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-space-sm reveal-on-scroll stagger-3">
-              <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0 pillar-icon-float">
-                <span className="material-symbols-outlined text-secondary text-[20px]">precision_manufacturing</span>
-              </div>
-              <div>
-                <h4 className="font-title-md text-[14px] text-on-surface font-medium uppercase tracking-wider">
-                  Slow Atelier
-                </h4>
-                <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
-                  Individually tailored in Kyoto &amp; Stockholm in batches of 20 to 60.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-space-sm reveal-on-scroll stagger-4">
-              <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0 pillar-icon-float">
-                <span className="material-symbols-outlined text-secondary text-[20px]">auto_fix_high</span>
-              </div>
-              <div>
-                <h4 className="font-title-md text-[14px] text-on-surface font-medium uppercase tracking-wider">
-                  Lifetime Garment Passport
-                </h4>
-                <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
-                  Free sashiko re-stitching and seasonal botanical re-dyeing.
-                </p>
-              </div>
+              <button
+                onClick={() => {
+                  if (onExploreShop) onExploreShop('');
+                }}
+                className="text-neutral-900 hover:text-black text-[11px] sm:text-xs font-semibold tracking-[0.16em] uppercase flex items-center gap-2 group cursor-pointer transition-colors"
+              >
+                <span>EXPLORE COLLECTIONS</span>
+                <span className="text-base transition-transform group-hover:translate-x-1">→</span>
+              </button>
             </div>
           </div>
         </div>

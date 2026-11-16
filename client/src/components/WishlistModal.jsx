@@ -1,5 +1,6 @@
 import React from 'react';
 import { getProductOffer } from '../utils/offerUtils';
+import { resolveProductImage, handleImageError } from '../utils/imageUtils';
 
 export default function WishlistModal({ isOpen, onClose, wishlistItems, onAddToCart, onRemoveWishlist }) {
   if (!isOpen) return null;
@@ -44,8 +45,9 @@ export default function WishlistModal({ isOpen, onClose, wishlistItems, onAddToC
                     className="flex items-center gap-space-md p-space-xs rounded bg-surface-container-low border border-surface-variant"
                   >
                     <img
-                      src={item.img}
+                      src={resolveProductImage(item)}
                       alt={item.title}
+                      onError={handleImageError()}
                       className="w-16 h-20 object-cover rounded shrink-0 bg-surface-container"
                     />
                     <div className="flex-1">

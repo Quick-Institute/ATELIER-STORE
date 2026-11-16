@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Search, User, ShoppingBag, Heart, ChevronDown, X, Menu, LayoutDashboard } from 'lucide-react';
+import { resolveUserAvatar, resolveProductImage, handleAvatarError, handleImageError } from '../utils/imageUtils';
 
 export default function Header({
   cartCount,
@@ -18,7 +20,16 @@ export default function Header({
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [liveProducts, setLiveProducts] = useState([]);
+  const [isScrolled, setIsScrolled] = useState(false);
   const searchRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Sync internal search query if parent prop changes
   useEffect(() => {
@@ -102,37 +113,47 @@ export default function Header({
   const popularTags = ['Dresses', 'Linen', 'Tunics', 'Blazer', 'Robes', 'Culottes', 'Silk', 'Stoneware'];
   const categoryFilters = ['All', 'Flax', 'Linen', 'Tailoring', 'Textiles', 'Ceramics'];
 
+  const isHomePage = activeTab === 'home';
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-surface/95 backdrop-blur-md border-b border-surface-variant/40 shadow-xs transition-all duration-300">
-      {/* Creative Shimmer Accent Line on Top */}
-      <div className="h-[2.5px] w-full bg-gradient-to-r from-amber-700 via-amber-400 via-primary to-amber-700 animate-shimmer-bar" />
-
-      {/* Top Banner Bar */}
-      <div className="w-full bg-surface-container-low/90 border-b border-surface-variant/30 backdrop-blur-sm">
-        <div className="max-w-max-width-editorial mx-auto px-margin-mobile md:px-margin-desktop h-9 flex items-center justify-between font-label-caps text-xs text-on-surface-variant uppercase tracking-wider">
-          <div className="hidden sm:flex items-center gap-2 text-[11px] font-medium text-on-surface-variant/80">
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>✦ Free Express Delivery on Luxury Apparel Orders Over Rs. 15,000</span>
+    <header
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        isHomePage && !isScrolled
+          ? 'bg-transparent border-transparent'
+          : 'bg-surface/95 backdrop-blur-md border-b border-surface-variant/40 shadow-xs'
+      }`}
+    >
+      {/* Top Banner Bar & Shimmer (displayed when scrolled or on other pages) */}
+      {(!isHomePage || isScrolled) && (
+        <>
+          <div className="h-[2.5px] w-full bg-gradient-to-r from-amber-700 via-amber-400 via-primary to-amber-700 animate-shimmer-bar" />
+          <div className="w-full bg-surface-container-low/90 border-b border-surface-variant/30 backdrop-blur-sm">
+            <div className="max-w-max-width-editorial mx-auto px-margin-mobile md:px-margin-desktop h-9 flex items-center justify-between font-label-caps text-xs text-on-surface-variant uppercase tracking-wider">
+              <div className="hidden sm:flex items-center gap-2 text-[11px] font-medium text-on-surface-variant/80">
+                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>✦ Free Express Delivery on Luxury Apparel Orders Over Rs. 15,000</span>
+              </div>
+              <div className="flex items-center gap-4 ml-auto">
+                <button
+                  onClick={() => setActiveTab('admin')}
+                  className="hover:text-secondary text-primary font-bold flex items-center gap-1.5 transition-all duration-200 cursor-pointer text-[11px] group"
+                >
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                  </span>
+                  <span className="material-symbols-outlined text-[15px] group-hover:rotate-45 transition-transform duration-300">space_dashboard</span>
+                  <span>Admin Console</span>
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-4 ml-auto">
-            <button
-              onClick={() => setActiveTab('admin')}
-              className="hover:text-secondary text-primary font-bold flex items-center gap-1.5 transition-all duration-200 cursor-pointer text-[11px] group"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
-              </span>
-              <span className="material-symbols-outlined text-[15px] group-hover:rotate-45 transition-transform duration-300">space_dashboard</span>
-              <span>Admin Console</span>
-            </button>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
 
-      {/* Main Navigation Bar */}
-      <div className="h-20 max-w-max-width-editorial mx-auto px-margin-mobile md:px-margin-desktop flex items-center justify-between gap-4">
-        {/* Brand Vector Logo with Micro Shimmer */}
+      {/* Main Navigation Bar (Exact reference layout from user image) */}
+      <div className="h-16 md:h-20 max-w-[1500px] mx-auto px-4 md:px-8 lg:px-12 flex items-center justify-between gap-4">
+        {/* Brand Vector Logo: ATELIER STORE */}
         <div className="flex items-center shrink-0">
           <a
             className="flex items-center group cursor-pointer relative"
@@ -145,7 +166,7 @@ export default function Header({
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 240 60"
-              className="h-9 md:h-10 w-auto text-on-surface transition-transform duration-300 group-hover:scale-[1.03]"
+              className="h-8 md:h-9 w-auto text-on-surface transition-transform duration-300 group-hover:scale-[1.03]"
               fill="none"
             >
               <text x="10" y="40" fontFamily="'Playfair Display', serif" fontSize="26" fontWeight="600" letterSpacing="0.18em" fill="currentColor">
@@ -159,137 +180,72 @@ export default function Header({
           </a>
         </div>
 
-        {/* Desktop Nav Links with Animated Underline & Micro-Indicators */}
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-8 shrink-0">
+        {/* Center Nav Links (Previous names restored) */}
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-8 shrink-0 text-xs xl:text-sm font-medium tracking-wide">
           <button
             onClick={() => setActiveTab('womens-wardrobe')}
-            className={`nav-link-anim cursor-pointer font-label-md text-label-md ${
-              activeTab === 'womens-wardrobe'
-                ? 'active text-on-surface font-semibold'
-                : 'text-on-surface-variant hover:text-on-surface'
+            className={`nav-link-anim cursor-pointer transition-colors ${
+              activeTab === 'womens-wardrobe' ? 'active text-neutral-900 font-semibold' : 'text-neutral-700 hover:text-neutral-900'
             }`}
           >
             <span>Women's Wardrobe</span>
           </button>
+
           <button
             onClick={() => setActiveTab('mens-tailoring')}
-            className={`nav-link-anim cursor-pointer font-label-md text-label-md ${
-              activeTab === 'mens-tailoring'
-                ? 'active text-on-surface font-semibold'
-                : 'text-on-surface-variant hover:text-on-surface'
+            className={`nav-link-anim cursor-pointer transition-colors ${
+              activeTab === 'mens-tailoring' ? 'active text-neutral-900 font-semibold' : 'text-neutral-700 hover:text-neutral-900'
             }`}
           >
             <span>Men's Clothing</span>
           </button>
+
           <button
             onClick={() => setActiveTab('textiles')}
-            className={`nav-link-anim cursor-pointer font-label-md text-label-md ${
-              activeTab === 'textiles'
-                ? 'active text-on-surface font-semibold'
-                : 'text-on-surface-variant hover:text-on-surface'
+            className={`nav-link-anim cursor-pointer transition-colors ${
+              activeTab === 'textiles' ? 'active text-neutral-900 font-semibold' : 'text-neutral-700 hover:text-neutral-900'
             }`}
           >
             <span>Textiles &amp; Fiber</span>
           </button>
+
           <button
             onClick={() => setActiveTab('about')}
-            className={`nav-link-anim cursor-pointer font-label-md text-label-md ${
-              activeTab === 'about'
-                ? 'active text-on-surface font-semibold'
-                : 'text-on-surface-variant hover:text-on-surface'
+            className={`nav-link-anim cursor-pointer transition-colors ${
+              activeTab === 'about' ? 'active text-neutral-900 font-semibold' : 'text-neutral-700 hover:text-neutral-900'
             }`}
           >
             <span>About Us</span>
           </button>
+
           <button
             onClick={() => setActiveTab('shop')}
-            className={`nav-link-anim cursor-pointer font-label-md text-label-md ${
-              activeTab === 'shop'
-                ? 'active text-on-surface font-semibold'
-                : 'text-on-surface-variant hover:text-on-surface'
+            className={`nav-link-anim cursor-pointer transition-colors ${
+              activeTab === 'shop' ? 'active text-neutral-900 font-semibold' : 'text-neutral-700 hover:text-neutral-900'
             }`}
           >
             <span>Catalog</span>
           </button>
         </nav>
 
-        {/* Right Actions: Search Box, Wishlist, Cart, Profile */}
-        <div className="flex items-center gap-3 md:gap-4 shrink-0" ref={searchRef}>
-          {/* Desktop Search Input with Smooth Expansion & Glow */}
-          <div className="relative hidden md:block group">
-            <form onSubmit={handleFormSubmit} className="relative flex items-center">
-              <span className="material-symbols-outlined absolute left-3 text-on-surface-variant/80 text-[18px] pointer-events-none group-focus-within:text-amber-600 transition-colors duration-200">
-                search
-              </span>
-              <input
-                value={internalQuery}
-                onChange={handleInputChange}
-                onFocus={() => setIsSearchFocused(true)}
-                className="w-48 xl:w-56 focus:w-64 xl:focus:w-76 h-10 pl-9 pr-8 rounded-full bg-surface-container-low border border-surface-variant/60 text-on-surface text-xs placeholder:text-on-surface-variant/70 focus:outline-none focus:border-amber-600/70 focus:ring-2 focus:ring-amber-500/20 focus:bg-surface-container-lowest transition-all duration-300 ease-out shadow-xs"
-                placeholder="Search natural fiber garments..."
-                type="text"
-              />
-              {internalQuery ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setInternalQuery('');
-                    if (setSearchQuery) setSearchQuery('');
-                  }}
-                  className="absolute right-2.5 p-0.5 text-on-surface-variant hover:text-on-surface cursor-pointer rounded-full hover:bg-surface-container-high transition-transform duration-200 hover:rotate-90"
-                >
-                  <span className="material-symbols-outlined text-[16px] block">close</span>
-                </button>
-              ) : null}
-            </form>
-          </div>
-
-          {/* Mobile Search Toggle Button */}
-          <button
-            onClick={() => {
-              setIsSearchOpen(!isSearchOpen);
-              setIsSearchFocused(true);
-            }}
-            aria-label="Toggle Search"
-            className="md:hidden p-2 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors cursor-pointer"
-            type="button"
-          >
-            <span className="material-symbols-outlined text-[22px]">search</span>
-          </button>
-
-          {/* Wishlist Icon with Heart Animation */}
+        {/* Right Action Icons: Wishlist, User, Bag, Admin */}
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0" ref={searchRef}>
+          {/* Wishlist Heart Icon */}
           <button
             onClick={() => setActiveTab('wishlist')}
             aria-label="Wishlist"
-            className="relative p-2 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-all duration-200 cursor-pointer group"
+            className="relative p-2 text-neutral-800 hover:text-black transition-transform hover:scale-105 cursor-pointer group"
             type="button"
           >
-            <span className={`material-symbols-outlined text-[22px] transition-transform duration-300 group-hover:scale-125 ${wishlistCount > 0 ? 'text-red-600 animate-heart-pop' : ''}`}>
-              {wishlistCount > 0 ? 'favorite' : 'favorite_border'}
-            </span>
+            <Heart className={`w-5 h-5 stroke-[1.8] transition-transform duration-200 group-hover:scale-110 ${wishlistCount > 0 ? 'fill-red-500 text-red-500' : ''}`} />
             {wishlistCount > 0 && (
-              <span className="absolute top-0.5 right-0.5 flex h-4 min-w-[1rem] px-1 items-center justify-center rounded-full bg-red-600 text-white font-label-caps text-[10px] leading-none font-bold shadow-sm animate-badge-pulse">
+              <span className="absolute top-1 right-0.5 min-w-[15px] h-[15px] px-1 rounded-full bg-red-600 text-white text-[9px] font-bold flex items-center justify-center leading-none shadow-xs">
                 {wishlistCount}
               </span>
             )}
           </button>
 
-          {/* Shopping Bag Icon with Bounce Effect */}
-          <button
-            onClick={onOpenCart}
-            aria-label="Shopping Bag"
-            className="relative p-2 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-all duration-200 flex items-center gap-1.5 cursor-pointer group"
-            type="button"
-          >
-            <span className="material-symbols-outlined text-[22px] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:rotate-6">
-              shopping_bag
-            </span>
-            <span className="flex h-5 px-1.5 items-center justify-center rounded-full bg-primary text-on-primary font-label-caps text-[10px] leading-none font-bold shadow-xs transition-transform duration-200 group-hover:scale-110">
-              {cartCount}
-            </span>
-          </button>
-
-          {/* Account Profile Icon with Golden Ring Halo */}
+          {/* User Profile / Account Icon */}
           <button
             onClick={() => {
               if (user) {
@@ -299,30 +255,47 @@ export default function Header({
               }
             }}
             aria-label="Account"
-            className="flex items-center cursor-pointer ml-0.5 group"
-            type="button"
+            className="p-2 text-neutral-800 hover:text-black transition-transform hover:scale-105 cursor-pointer"
           >
             {user ? (
               <img
-                alt={user.name}
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-amber-500/50 hover:ring-amber-500 shadow-xs transition-all duration-300 group-hover:scale-105"
-                src={user.avatar}
+                alt={user.name || 'User'}
+                className="w-6 h-6 rounded-full object-cover ring-1 ring-neutral-400"
+                src={resolveUserAvatar(user)}
+                onError={handleAvatarError(user?.name)}
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-surface-container-low border border-surface-variant flex items-center justify-center text-on-surface-variant group-hover:text-on-surface group-hover:border-amber-600/70 group-hover:bg-amber-50/10 transition-all duration-300 group-hover:scale-105 shadow-xs">
-                <span className="material-symbols-outlined text-[20px] transition-transform duration-300 group-hover:scale-110">person</span>
-              </div>
+              <User className="w-5 h-5 stroke-[1.8]" />
             )}
           </button>
 
-          {/* Mobile Menu Hamburger Toggle */}
+          {/* Shopping Bag Icon with Pill Badge (e.g. 0) */}
           <button
-            className="lg:hidden p-2 rounded-lg text-on-surface-variant hover:text-on-surface cursor-pointer transition-transform duration-200 active:scale-90"
+            onClick={onOpenCart}
+            aria-label="Shopping Bag"
+            className="relative p-2 text-neutral-800 hover:text-black transition-transform hover:scale-105 cursor-pointer group"
+          >
+            <ShoppingBag className="w-5 h-5 stroke-[1.8]" />
+            <span className="absolute top-1 right-0.5 min-w-[15px] h-[15px] px-1 rounded-full bg-neutral-900 text-white text-[9px] font-bold flex items-center justify-center leading-none">
+              {cartCount}
+            </span>
+          </button>
+
+          {/* Discreet Admin Link (4 squares grid) */}
+          <button
+            onClick={() => setActiveTab('admin')}
+            title="Admin Console"
+            className="p-2 text-neutral-500 hover:text-neutral-900 transition-colors hidden sm:block cursor-pointer"
+          >
+            <LayoutDashboard className="w-4 h-4" />
+          </button>
+
+          {/* Mobile Menu Hamburger */}
+          <button
+            className="lg:hidden p-2 text-neutral-800 hover:text-black cursor-pointer"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            <span className="material-symbols-outlined text-[24px] transition-transform duration-300">
-              {mobileMenuOpen ? 'close' : 'menu'}
-            </span>
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
